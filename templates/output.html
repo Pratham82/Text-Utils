@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<style>
+			* {
+				font-family: Fira Code;
+			}
+
+			.container {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				flex-direction: column;
+				padding: 50px;
+			}
+			textarea {
+				padding: 10px;
+				width: 100%;
+				height: 100px;
+				font-size: 20px;
+				resize: none;
+				border: 0.15px solid rgb(199, 196, 196);
+				border-radius: 15px;
+				outline: none;
+			}
+			#btn {
+				font-size: 20px;
+				padding: 7.5px 25px;
+				border: none;
+				border-radius: 25px;
+				margin: 10px;
+				background-color: rgb(58, 136, 252);
+				outline: none;
+				color: white;
+			}
+
+			#btn:hover {
+				cursor: pointer;
+				background-color: rgb(119, 169, 243);
+				transition: 0.7s ease-out;
+			}
+
+			#btn-copy {
+				font-size: 20px;
+				padding: 7.5px 25px;
+				border: none;
+				border-radius: 25px;
+				margin: 10px;
+				background-color: rgb(58, 136, 252);
+				outline: none;
+				color: white;
+			}
+
+			#myInput {
+				padding: 10px;
+				border: 1px solid grey;
+				border-radius: 25px;
+				font-size: 18px;
+				text-align: center;
+				/* margin: 10px; */
+				outline: none;
+			}
+
+			/*Tool tip*/
+			.tooltip1 {
+				position: relative;
+				display: inline-block;
+			}
+
+			.tooltip1 .tooltiptext {
+				visibility: hidden;
+				width: 140px;
+				background-color: #555;
+				color: #fff;
+				text-align: center;
+				border-radius: 6px;
+				padding: 5px;
+				position: absolute;
+				z-index: 1;
+				bottom: 150%;
+				left: 50%;
+				margin-left: -75px;
+				opacity: 0;
+				transition: opacity 0.3s;
+			}
+
+			.tooltip1 .tooltiptext::after {
+				content: "";
+				position: absolute;
+				top: 100%;
+				left: 50%;
+				margin-left: -5px;
+				border-width: 5px;
+				border-style: solid;
+				border-color: #555 transparent transparent transparent;
+			}
+
+			.tooltip1:hover .tooltiptext {
+				visibility: visible;
+				opacity: 1;
+			}
+
+			.output-container {
+				/* border: 1px solid; */
+				padding: 10px;
+				margin: 10px;
+				border-radius: 10px;
+			}
+
+			.output-container > div {
+				padding: 10px;
+				font-size: 20px;
+				border: 1px solid;
+				margin: 5px;
+				border-radius: 12px;
+			}
+
+			.input-value {
+				background-color: rgb(247, 80, 80);
+				color: white;
+			}
+			.output-value {
+				background-color: rgb(13, 214, 13);
+				color: white;
+			}
+
+			.operation {
+				text-align: center;
+				font-size: 25px !important;
+				border: none !important;
+			}
+		</style>
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+			integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+			crossorigin="anonymous"
+		/>
+	</head>
+	<body>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<a class="navbar-brand" href="/">TextAnalyzer</a>
+			<button
+				class="navbar-toggler"
+				type="button"
+				data-toggle="collapse"
+				data-target="#navbarNavDropdown"
+				aria-controls="navbarNavDropdown"
+				aria-expanded="false"
+				aria-label="Toggle navigation"
+			>
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNavDropdown">
+				<ul class="navbar-nav">
+					<li class="nav-item active">
+						<a class="nav-link" href="/"
+							>Home <span class="sr-only">(current)</span></a
+						>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="about">About Us</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="contact">Contact Us</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+		<div
+			class="alert alert-success alert-dismissible fade show"
+			role="alert"
+		>
+			<strong>Success!</strong> Your text has been analyzed!
+			<button
+				type="button"
+				class="close"
+				data-dismiss="alert"
+				aria-label="Close"
+			>
+				<span aria-hidden="true">×</span>
+			</button>
+		</div>
+		<div class="container">
+			<h2>Analyzed Text</h2>
+			<div class="output-container">
+				<div class="operation">{{message}}</div>
+				<h5>Input:</h5>
+				<div class="input-value"><pre>{{input}}</pre></div>
+
+				<h5>Output:</h5>
+				<div class="output-value">
+					<pre class="output-value">{{result}}</pre>
+				</div>
+			</div>
+
+			<!-- The button used to copy the text -->
+			<div class="output">
+				<!-- <input type="text" value="Hello World" id="myInput" />
+				<button onclick="myFunction()">Copy text</button> -->
+				<div>
+					<input type="text" value="{{result}}" id="myInput" />
+					<div
+						class="tooltip1"
+						style="
+							display: flex;
+							justify-content: center;
+							align-items: center;
+						"
+					>
+						<button
+							onclick="myFunction()"
+							onmouseout="outFunc()"
+							id="btn-copy"
+						>
+							<span class="tooltiptext" id="myTooltip"
+								>Copy to clipboard</span
+							>
+							Copy text
+						</button>
+					</div>
+				</div>
+			</div>
+			<a href="/">
+				<button id="btn"><- Home</button>
+			</a>
+		</div>
+
+		<script
+			src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+			integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+			integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+			integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+			crossorigin="anonymous"
+		></script>
+
+		<script>
+			function myFunction() {
+				/* Get the text field */
+				var copyText = document.getElementById("myInput");
+
+				/* Select the text field */
+				copyText.select();
+				copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+				/* Copy the text inside the text field */
+				document.execCommand("copy");
+			}
+		</script>
+	</body>
+</html>
